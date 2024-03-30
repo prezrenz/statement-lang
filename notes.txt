@@ -1,0 +1,38 @@
+FEATURES:
+
+
+GRAMMAR:
+
+Rules:
+-- (*) - repeat production
+-- (|) - OR
+-- (?) - optional production
+
+program -> statement* EOF;
+
+statement -> decl | assign | print | input | cond;
+
+decl -> "var" NAME ("=" expression)? ";" ;
+assign -> NAME "=" expression ";" ;
+print -> "print" expression ";" ;
+input -> "input" NAME ";" ;
+cond -> "if" expression LABEL ("else" LABEL)?
+
+expression -> equality
+
+equality -> comparison (("==" | "!=") comparison)* ;
+comparison -> term ((">" | "<" | "<=" | ">=") term)* ;
+term -> factor (("+" | "-") factor)* ;
+factor -> primary (("*" | "/") primary)* ;
+primary -> NAME | STRING | NUMBER | "true" | "false" | "none" | "(" expression ")" ;
+
+OPERATOR PRECEDENCE:
+
+Highest to Lowest
+
+/ *
+- +
+> < >= <=
+== !=
+
+tokentypes = {NAME, STRING, TRUE, FALSE, NONE}
