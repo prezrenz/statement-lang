@@ -1,7 +1,7 @@
 [
     {
-        "directory": "E:\\Programming\\SourceCode\\CCPP\\StatementLang",
-        "command": "g++ main.o -Wall -Wextra -g -o interpreter.exe",
-        "file": "E:\\Programming\\SourceCode\\CCPP\\StatementLang\\main.cpp"
+        "directory": "C:\\Programming\\SourceCode\\statement-lang",
+        "command": "g++ main.o -Wall -Wextra -g -o statement.exe",
+        "file": "C:\\Programming\\SourceCode\\statement-lang\\main.o"
     }
 ]
