@@ -1,3 +1,4 @@
 .cache/**
 build/**
-*.json
+compile_commands.json
+gen_compile_commands.py
