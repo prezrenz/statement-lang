@@ -1,7 +1,0 @@
-[
-    {
-        "directory": "C:\\Programming\\SourceCode\\statement-lang",
-        "command": "g++ main.o -Wall -Wextra -g -o statement.exe",
-        "file": "C:\\Programming\\SourceCode\\statement-lang\\main.o"
-    }
-]
