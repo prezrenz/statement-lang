@@ -4,6 +4,19 @@
 #include <vector>
 using namespace std;
 
+enum TokenTypes
+{
+    TOK_WORD, TOK_STR, TOK_NUM,
+    TOK_TRUE, TOK_FALSE, TOK_NONE,
+    
+    TOK_EQUAL, TOK_EEQUAL, TOK_LESS_THAN,
+    TOK_GREATER_THAN, TOK_EGREATER, TOK_ELESS,
+
+    TOK_PLUS, TOK_MINUS, TOK_STAR,
+    TOK_SLASH, TOK_BANG, TOK_SCOLON,
+    TOK_COLON, TOK_LABEL
+};
+
 class Scanner
 {
     public:
