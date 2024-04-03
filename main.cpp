@@ -17,6 +17,14 @@ enum TokenTypes
     TOK_COLON, TOK_LABEL
 };
 
+struct Token
+{
+    TokenTypes type;
+    char token;
+    string str_literal;
+    int num_literal;
+};
+
 class Scanner
 {
     public:
