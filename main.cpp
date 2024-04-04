@@ -1,6 +1,7 @@
 #include <cctype>
 #include <iostream>
 #include <fstream>
+#include <string>
 #include <vector>
 using namespace std;
 
@@ -14,14 +15,17 @@ enum TokenTypes
 
     TOK_PLUS, TOK_MINUS, TOK_STAR,
     TOK_SLASH, TOK_BANG, TOK_SCOLON,
-    TOK_COLON, TOK_LABEL
+    TOK_COLON, TOK_QUOTE, TOK_LPAREN,
+    TOK_RPAREN,
+
+    TOK_PRINT, TOK_VAR, TOK_INPUT,
+    TOK_IF, TOK_ELSE, TOK_LABEL,
 };
 
 struct Token
 {
     TokenTypes type;
-    char token;
-    string str_literal;
+    string token;
     int num_literal;
 };
 
@@ -33,7 +37,7 @@ class Scanner
             program = file;
         }
 
-        vector<string> scan()
+        vector<Token*> scan()
         {
             line = 0;
             current = program->get();
@@ -50,45 +54,70 @@ class Scanner
         ifstream* program;
         int line;
         char current;
-        vector<string> tokens;
+        vector<Token*> tokens; 
 
         void advance()
         {
             current = program->get();
         }
 
-        void createToken(string token)
+        void createToken(TokenTypes type, string token)
         {
-            token += current;
-            tokens.push_back(token);
-            advance();
+            Token* newToken = new Token;
+
+            newToken->type = type;
+            newToken->token = token;
+            newToken->num_literal = 0;
+
+            if(type == TOK_NUM)
+            {
+                newToken->num_literal = stoi(token);
+            }
+
+            tokens.push_back(newToken);
         }
 
-        void createWordToken(string* token)
+        void createSingleToken(TokenTypes type, string token)
+        {
+            token += current;
+            advance();
+
+            createToken(type, token);
+        }
+
+        void createWordToken(string token)
         {
             while (isalpha(current))
             {
-                *token += current;
+                token += current;
                 advance();
             }
+
+            // TODO: Check if reserved word or label or var
+            
+            createToken(TOK_WORD, token);
         }
 
-        void createIntToken(string* token)
+        void createIntToken(string token)
         {
             while (isdigit(current))
             {
-                *token += current;
+                token += current;
                 advance();
             }
+
+            createToken(TOK_NUM, token);
         }
 
-        void createStringToken(string* token)
+        void createStringToken(string token)
         {
             while(current != '"' && !program->eof())
             {
-                *token += current;
+                token += current;
                 advance();
             }
+
+            createToken(TOK_STR, token);
         }
 
         void scanToken()
@@ -97,21 +126,43 @@ class Scanner
             switch (current)
             {
                 case '+':
+                    createSingleToken(TOK_PLUS, token);
+                    break;
                 case '-':
+                    createSingleToken(TOK_MINUS, token);
+                    break;
                 case '/':
+                    createSingleToken(TOK_SLASH, token);
+                    break;
                 case '*':
+                    createSingleToken(TOK_STAR, token);
+                    break;
                 case '=':
+                    createSingleToken(TOK_EQUAL, token);
+                    break;
                 case '>':
+                    createSingleToken(TOK_GREATER_THAN, token);
+                    break;
                 case '<':
+                    createSingleToken(TOK_LESS_THAN, token);
+                    break;
                 case '!':
+                    createSingleToken(TOK_BANG, token);
+                    break;
                 case ';':
-                    createToken(token);
+                    createSingleToken(TOK_COLON, token);
+                    break;
+                case '(':
+                    createSingleToken(TOK_LPAREN, token);
+                    break;
+                case ')':
+                    createSingleToken(TOK_RPAREN, token);
                     break;
                 case '"':
-                    advance();
-                    createStringToken(&token);
-                    advance();
-                    tokens.push_back(token);
+                    createSingleToken(TOK_QUOTE, token);
+                    createStringToken(token);
+                    // TODO: should check if eof, if so report error unterminated string
+                    createSingleToken(TOK_QUOTE, token); 
                     break;
                 case ' ':
                 case '\n':
@@ -121,14 +172,12 @@ class Scanner
                 default:
                     if(isalpha(current))
                     {
-                        createWordToken(&token);
-                        tokens.push_back(token);
+                        createWordToken(token);
                     }
                     
                     if(isdigit(current))
                     {
-                        createIntToken(&token);
-                        tokens.push_back(token);
+                        createIntToken(token);
                     }
             }
         }
@@ -143,7 +192,7 @@ int main(int argc, char** argv)
     }
 
     ifstream file;
-    vector<string> tokens;
+    vector<Token*> tokens;
 
     file.open(argv[1]);
 
@@ -158,7 +207,9 @@ int main(int argc, char** argv)
 
     for (int i = 0; i < tokens.size(); i++)
     {
-        cout << tokens[i] << endl;
+        cout << tokens[i]->token << endl;
+        cout << tokens[i]->num_literal << endl;
+        cout << "----------------" << endl;
     }
 
     return 0;

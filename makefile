@@ -1,17 +1,16 @@
 CC = g++
 CFLAGS = -Wall -Wextra -g
 
-SOURCES = $(wildcard *.cpp)
-OBJS=$(SOURCES:.cpp=.o)
+SOURCES = main.cpp
 
 all: statement  
 
-statement: $(OBJS)	
-	$(CC) $(OBJS) $(CFLAGS) -o statement.exe
+statement:	
+	$(CC) $(SOURCES) $(CFLAGS) -o statement.exe
 	
 run:
 	./statement
 
 clean:
-	del $(OBJS)
+	del main.o
 	del statement.exe
