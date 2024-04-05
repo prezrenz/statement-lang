@@ -12,5 +12,4 @@ run:
 	./statement
 
 clean:
-	del main.o
 	del statement.exe

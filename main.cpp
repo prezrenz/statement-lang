@@ -42,9 +42,17 @@ class Scanner
             line = 0;
             current = program->get();
 
-            while(!program->eof())
+            try
             {
-                scanToken();
+                while(!program->eof())
+                {
+                    scanToken();
+                }
+            }
+            catch (const char* e)
+            {
+                cout << e << endl;
+                tokens.clear();
             }
 
             return tokens;
@@ -162,6 +170,12 @@ class Scanner
                     createSingleToken(TOK_QUOTE, token);
                     createStringToken(token);
                     // TODO: should check if eof, if so report error unterminated string
+
+                    if(program->eof())
+                    {
+                        throw "Scanner Error: unterminated string";
+                    }
+
                     createSingleToken(TOK_QUOTE, token); 
                     break;
                 case ' ':
@@ -204,6 +218,8 @@ int main(int argc, char** argv)
 
     Scanner scanner(&file);
     tokens = scanner.scan();
+
+    if(tokens.empty()) return 1; 
 
     for (int i = 0; i < tokens.size(); i++)
     {
