@@ -22,6 +22,22 @@ enum TokenTypes
     TOK_IF, TOK_ELSE, TOK_LABEL,
 };
 
+string tokenStrings[28] = {
+    "TOK_WORD", "TOK_STR", "TOK_NUM",
+    "TOK_TRUE", "TOK_FALSE", "TOK_NONE",
+    
+    "TOK_EQUAL", "TOK_EEQUAL", "TOK_LESS_THAN",
+    "TOK_GREATER_THAN", "TOK_EGREATER", "TOK_ELESS",
+
+    "TOK_PLUS", "TOK_MINUS", "TOK_STAR",
+    "TOK_SLASH", "TOK_BANG", "TOK_SCOLON",
+    "TOK_COLON", "TOK_QUOTE", "TOK_LPAREN",
+    "TOK_RPAREN",
+
+    "TOK_PRINT", "TOK_VAR", "TOK_INPUT",
+    "TOK_IF", "TOK_ELSE", "TOK_LABEL"
+};
+
 struct Token
 {
     TokenTypes type;
@@ -69,6 +85,46 @@ class Scanner
             current = program->get();
         }
 
+        TokenTypes matchReservedWord(string token)
+        {
+            if(token == "var")
+            {
+                return TOK_VAR;
+            }
+            else if(token == "print")
+            {
+                return TOK_PRINT;
+            }
+            else if(token == "input")
+            {
+                return TOK_INPUT;
+            }
+            else if(token == "true")
+            {
+                return TOK_TRUE;
+            }
+            else if(token == "false")
+            {
+                return TOK_FALSE;
+            }
+            else if(token == "none")
+            {
+                return TOK_NONE;
+            }
+            else if(token == "if")
+            {
+                return TOK_IF;
+            }
+            else if(token == "else")
+            {
+                return TOK_ELSE;
+            }
+            else
+            {
+                return TOK_WORD;
+            }
+        }
+
         void createToken(TokenTypes type, string token)
         {
             Token* newToken = new Token;
@@ -101,9 +157,9 @@ class Scanner
                 advance();
             }
 
-            // TODO: Check if reserved word or label or var
+            TokenTypes type = matchReservedWord(token);
             
-            createToken(TOK_WORD, token);
+            createToken(type, token);
         }
 
         void createIntToken(string token)
@@ -223,6 +279,7 @@ int main(int argc, char** argv)
 
     for (int i = 0; i < tokens.size(); i++)
     {
+        cout << tokenStrings[tokens[i]->type] << endl;
         cout << tokens[i]->token << endl;
         cout << tokens[i]->num_literal << endl;
         cout << "----------------" << endl;

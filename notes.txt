@@ -36,3 +36,5 @@ Highest to Lowest
 == !=
 
 tokentypes = {NAME, STRING, TRUE, FALSE, NONE}
+
+reserved words = {true, false, none, if, else, print, input, var}
