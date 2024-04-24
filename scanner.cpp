@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cctype>
 #include "scanner.hpp"
 
 using namespace std;
