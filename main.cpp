@@ -1,4 +1,5 @@
 #include <cctype>
+#include <cstddef>
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -277,7 +278,7 @@ int main(int argc, char** argv)
 
     if(tokens.empty()) return 1; 
 
-    for (int i = 0; i < tokens.size(); i++)
+    for (size_t i = 0; i < tokens.size(); i++)
     {
         cout << tokenStrings[tokens[i]->type] << endl;
         cout << tokens[i]->token << endl;
