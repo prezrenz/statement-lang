@@ -1,9 +1,9 @@
 CC = g++
 CFLAGS = -Wall -Wextra -g
 
-SOURCES = main.cpp
+SOURCES = main.cpp scanner.cpp
 
-all: statement  
+all: statement
 
 statement:	
 	$(CC) $(SOURCES) $(CFLAGS) -o statement.exe
