@@ -2,9 +2,11 @@
 #include <fstream>
 #include <iostream>
 #include <vector>
+
 #include "token.hpp"
 #include "scanner.hpp"
 #include "ast.hpp"
+#include "parser.hpp"
 
 using namespace std;
 
@@ -46,6 +48,9 @@ int main(int argc, char** argv)
 
     Scanner scanner(&file);
     tokens = scanner.scan();
+
+    Parser parser(tokens);
+    statements = parser.parse();
 
     if(tokens.empty()) return 1; 
 
