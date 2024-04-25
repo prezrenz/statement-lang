@@ -23,11 +23,26 @@ class DeclStmt: Stmt
     ~DeclStmt();
 };
 
+class AssignStmt: Stmt
+{
+    std::string name;
+    Expr* expr;
+
+    ~AssignStmt();
+};
+
 class PrintStmt: Stmt
 {
     Expr* expr;
 
     ~PrintStmt();
+};
+
+class InputStmt: Stmt
+{
+    std::string name;
+    
+    ~InputStmt();
 };
 
 template<typename T>
