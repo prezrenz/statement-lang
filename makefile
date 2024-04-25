@@ -2,7 +2,7 @@ CC = g++
 CFLAGS = -Wall -Wextra -g
 
 SOURCES = main.cpp scanner.cpp parser.cpp
-
+ 
 all: statement
 
 statement:	

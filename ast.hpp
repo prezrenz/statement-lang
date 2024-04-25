@@ -8,67 +8,131 @@
 class Expr
 {
     public:
-        virtual ~Expr() = 0;
+        virtual std::string stringify() = 0;
+        virtual ~Expr() {}
 };
 
 class Stmt
 {
     public:
-        virtual ~Stmt() = 0;
+        virtual std::string stringify() = 0;
+        virtual ~Stmt() {}
 };
 
 class DeclStmt: Stmt
 {
-    DeclStmt(std::string _name, Expr* _expr): name(_name), expr(_expr) {}
+    public:
+        DeclStmt(std::string _name, Expr* _expr): name(_name), expr(_expr) {}
+        std::string stringify()
+        {
+            return "var " + name + " = " + expr->stringify();
+        }
 
-    std::string name;
-    Expr* expr;
+        ~DeclStmt() {}
+
+    private:
+        std::string name;
+        Expr* expr;
 };
 
 class AssignStmt: Stmt
 {
-    AssignStmt(std::string _name, Expr* _expr): name(_name), expr(_expr) {}    
+    public:
+        AssignStmt(std::string _name, Expr* _expr): name(_name), expr(_expr) {}
 
-    std::string name;
-    Expr* expr;
+        std::string stringify()
+        {
+            return name + " = " + expr->stringify();
+        }
+
+        ~AssignStmt() {}
+
+    private:
+        std::string name;
+        Expr* expr;
 };
 
 class PrintStmt: Stmt
 {
-    PrintStmt(Expr* _expr): expr(_expr) {}
+    public:
+        PrintStmt(Expr* _expr): expr(_expr) {}
+        
+        std::string stringify()
+        {
+            return "print " + expr->stringify();
+        }
 
-    Expr* expr;
+        ~PrintStmt() {}
+
+    private:
+        Expr* expr;
 };
 
 class InputStmt: Stmt
 {
-    InputStmt(std::string _name): name(_name) {}
+    public:
+        InputStmt(std::string _name): name(_name) {}
 
-    std::string name;
+        std::string stringify()
+        {
+            return "input " + name;
+        }
+
+        ~InputStmt() {}
+
+    private:
+        std::string name;
 };
 
 template<typename T>
-class PrimaryExpr: Expr
+class PrimaryExpr: public Expr
 {
-    PrimaryExpr(T _value): value(_value) {}
+    public:
+        PrimaryExpr(T _value): value(_value) {}
 
-    T value;
+        std::string stringify()
+        {
+            return std::to_string(value);
+        }
+
+        ~PrimaryExpr() {}
+
+    private:
+        T value;
 };
 
-class BinaryOpExpr: Expr
+class BinaryOpExpr: public Expr
 {
-    BinaryOpExpr(char _op, Expr* _left, Expr* _right): op(_op), left(_left), right(_right) {}
+    public:
+        BinaryOpExpr(std::string _op, Expr* _left, Expr* _right): op(_op), left(_left), right(_right) {}
+    
+        std::string stringify()
+        {
+            return "( " + op + " " + left->stringify() + " " + right->stringify() + " )";
+        }
 
-    char op;
-    Expr* left;
-    Expr* right;
+        ~BinaryOpExpr() {}
+
+    private:
+        std::string op;
+        Expr* left;
+        Expr* right;
 };
 
 class GroupingExpr: Expr
 {
-    GroupingExpr(Expr* _expr): expr(_expr) {}
+    public:
+        GroupingExpr(Expr* _expr): expr(_expr) {}
+    
+        std::string stringify()
+        {
+            return "( " + expr->stringify() + " )";
+        }
 
-    Expr* expr;
+        ~GroupingExpr() {}
+
+    private:
+        Expr* expr;
 };
 
 #endif

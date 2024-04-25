@@ -49,18 +49,31 @@ int main(int argc, char** argv)
     Scanner scanner(&file);
     tokens = scanner.scan();
 
-    Parser parser(tokens);
-    statements = parser.parse();
+    /* Parser parser(tokens);
+    statements = parser.parse();*/
 
     if(tokens.empty()) return 1; 
 
-    for (size_t i = 0; i < tokens.size(); i++)
+    /*for (size_t i = 0; i < tokens.size(); i++)
     {
         cout << tokenStrings[tokens[i]->type] << endl;
         cout << tokens[i]->token << endl;
         cout << tokens[i]->num_literal << endl;
         cout << "----------------" << endl;
-    }
+    }*/
+
+    PrimaryExpr<int> *p1 = new PrimaryExpr<int>(1);
+    PrimaryExpr<int> *p2 = new PrimaryExpr<int>(2);
+    PrimaryExpr<int> *p3 = new PrimaryExpr<int>(3);
+
+    BinaryOpExpr b1("+", p1, p2);
+    BinaryOpExpr b2("+", p2, p3);
+    BinaryOpExpr b3("*", &b1, &b2);
+
+    DeclStmt d1("a", &b3);
+
+    cout << d1.stringify();
 
     return 0;
 }
+    
