@@ -4,6 +4,7 @@
 #include <vector>
 #include "token.hpp"
 #include "scanner.hpp"
+#include "ast.hpp"
 
 using namespace std;
 
@@ -33,6 +34,7 @@ int main(int argc, char** argv)
 
     ifstream file;
     vector<Token*> tokens;
+    vector<Stmt*> statements;
 
     file.open(argv[1]);
 

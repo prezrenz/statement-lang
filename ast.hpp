@@ -3,33 +3,55 @@
 
 #include <string>
 
-struct Expr {};
-struct Stmt {};
+// TODO: Convert to classes and abstract class
 
-struct VarStmt: Stmt
+class Expr
 {
-    std::string name;
-    Expr value;
+    virtual ~Expr() = 0;
 };
 
-struct PrintStmt: Stmt
+class Stmt
 {
-    Expr value;
+    virtual ~Stmt() = 0;
+};
+
+class DeclStmt: Stmt
+{
+    std::string name;
+    Expr* expr;
+
+    ~DeclStmt();
+};
+
+class PrintStmt: Stmt
+{
+    Expr* expr;
+
+    ~PrintStmt();
 };
 
 template<typename T>
-struct PrimaryExpr: Expr
+class PrimaryExpr: Expr
 {
-    std::string exprType = "PrimaryExpr";
     T value;
+    
+    ~PrimaryExpr();
 };
 
-struct BinaryExpr: Expr
+class BinaryOpExpr: Expr
 {
-    std::string exprType = "BinaryExpr";
-    std::string operation;
-    Expr left;
-    Expr right;
+    char op;
+    Expr* left;
+    Expr* right;
+    
+    ~BinaryOpExpr();
+};
+
+class GroupingExpr: Expr
+{
+    Expr* expr;
+
+    ~GroupingExpr();
 };
 
 #endif
