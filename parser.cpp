@@ -30,7 +30,9 @@ void Parser::advance()
 
 bool Parser::match(TokenTypes type)
 {
-    if(tok->type == type) return true;
+    Token tok = **current;
+
+    if(tok.type == type) return true;
 
     return false;
 }
@@ -40,7 +42,7 @@ Stmt* Parser::parseStmt()
     if((*current)->type == TOK_VAR) return parseDeclStmt();
 }
 
-Stmt* Parser::parseDeclStmt()
+DeclStmt* Parser::parseDeclStmt()
 {
     advance();
 
@@ -64,7 +66,9 @@ Stmt* Parser::parseDeclStmt()
         
     }
 
-    DeclStmt newDeclStmt = new DeclStmt();
+    DeclStmt* newDeclStmt = new DeclStmt(name, expr);
+
+    return newDeclStmt;
 }
 
 Stmt* Parser::parseAssignStmt()

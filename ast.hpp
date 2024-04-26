@@ -19,7 +19,7 @@ class Stmt
         virtual ~Stmt() {}
 };
 
-class DeclStmt: Stmt
+class DeclStmt: public Stmt
 {
     public:
         DeclStmt(std::string _name, Expr* _expr): name(_name), expr(_expr) {}
@@ -35,7 +35,7 @@ class DeclStmt: Stmt
         Expr* expr;
 };
 
-class AssignStmt: Stmt
+class AssignStmt: public Stmt
 {
     public:
         AssignStmt(std::string _name, Expr* _expr): name(_name), expr(_expr) {}
@@ -52,7 +52,7 @@ class AssignStmt: Stmt
         Expr* expr;
 };
 
-class PrintStmt: Stmt
+class PrintStmt: public Stmt
 {
     public:
         PrintStmt(Expr* _expr): expr(_expr) {}
@@ -68,7 +68,7 @@ class PrintStmt: Stmt
         Expr* expr;
 };
 
-class InputStmt: Stmt
+class InputStmt: public Stmt
 {
     public:
         InputStmt(std::string _name): name(_name) {}
@@ -119,7 +119,7 @@ class BinaryOpExpr: public Expr
         Expr* right;
 };
 
-class GroupingExpr: Expr
+class GroupingExpr: public Expr
 {
     public:
         GroupingExpr(Expr* _expr): expr(_expr) {}
