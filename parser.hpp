@@ -20,7 +20,7 @@ class Parser
         bool match(TokenTypes type);
 
         Stmt* parseStmt();
-        DeclStmt* parseDeclStmt();
+        Stmt* parseDeclStmt();
         Stmt* parseAssignStmt();
         Stmt* parsePrintStmt();
         Stmt* parseInputStmt();

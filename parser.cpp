@@ -42,7 +42,7 @@ Stmt* Parser::parseStmt()
     if((*current)->type == TOK_VAR) return parseDeclStmt();
 }
 
-DeclStmt* Parser::parseDeclStmt()
+Stmt* Parser::parseDeclStmt()
 {
     advance();
 
@@ -89,12 +89,21 @@ Stmt* Parser::parseInputStmt()
 
 Expr* Parser::parseExpr()
 {
-
+    return equality();
 }
 
 Expr* Parser::equality()
 {
+    Expr* left = comparison();
 
+    while(match(TOK_EEQUAL)) // TODO: Fix scanner to include != token
+    {
+        Token op = **current;
+        advance();
+
+        Expr* right = comparison();
+        left = new BinaryOpExpr(op.token, left, right);
+    }
 }
 
 Expr* Parser::comparison()
