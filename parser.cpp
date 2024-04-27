@@ -40,6 +40,7 @@ bool Parser::match(TokenTypes type)
 Stmt* Parser::parseStmt()
 {
     if((*current)->type == TOK_VAR) return parseDeclStmt();
+    if((*current)->type == TOK_PRINT) return parsePrintStmt();
 }
 
 Stmt* Parser::parseDeclStmt()
@@ -73,17 +74,24 @@ Stmt* Parser::parseDeclStmt()
 
 Stmt* Parser::parseAssignStmt()
 {
-
+    // TODO
 }
 
 Stmt* Parser::parsePrintStmt()
 {
+    advance();
 
+    Expr* expr;
+
+
+    expr = parseExpr();
+
+    return new PrintStmt(expr);
 }
     
 Stmt* Parser::parseInputStmt()
 {
-
+    // TODO
 }
 
 
@@ -104,24 +112,70 @@ Expr* Parser::equality()
         Expr* right = comparison();
         left = new BinaryOpExpr(op.token, left, right);
     }
+
+    return left;
 }
 
 Expr* Parser::comparison()
 {
+    Expr* left = term();
 
+    while(match(TOK_LESS_THAN) || match(TOK_GREATER_THAN) || match(TOK_EGREATER) || match(TOK_ELESS))
+    {
+        Token op = **current;
+        advance();
+
+        Expr* right = term();
+        left = new BinaryOpExpr(op.token, left, right);
+    }
+
+    return left;
 }
 
 Expr* Parser::term()
 {
+    Expr* left = factor();
 
+    while(match(TOK_PLUS) || match(TOK_MINUS))
+    {
+        Token op = **current;
+        advance();
+
+        Expr* right = factor();
+        left = new BinaryOpExpr(op.token, left, right);
+    }
+
+    return left;
 }
 
 Expr* Parser::factor()
 {
+    Expr* left = primary();
 
+    while(match(TOK_STAR) || match(TOK_SLASH))
+    {
+        Token op = **current;
+        advance();
+
+        Expr* right = primary();
+        left = new BinaryOpExpr(op.token, left, right);
+    }
+
+    return left;
 }
 
 Expr* Parser::primary()
 {
-
+    if(match(TOK_NUM))
+    {
+         return new PrimaryExpr<int>((**current).num_literal);
+    }
+    else if(match(TOK_STR))
+    {
+        return new PrimaryExpr<std::string>((**current).token); 
+    }
+    else
+    {
+        return new PrimaryExpr<std::string>((**current).token); // catch all till other primaries are implemented
+    }
 }
