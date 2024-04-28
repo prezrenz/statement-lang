@@ -84,6 +84,7 @@ class InputStmt: public Stmt
         std::string name;
 };
 
+/*
 template<typename T>
 class PrimaryExpr: public Expr
 {
@@ -99,6 +100,38 @@ class PrimaryExpr: public Expr
 
     private:
         T value;
+};*/
+
+class NumExpr: public Expr
+{
+    public:
+        NumExpr(int _value): value(_value) {}
+
+        std::string stringify()
+        {
+            return std::to_string(value);
+        }
+
+        ~NumExpr() {}
+
+    private:
+        int value;
+};
+
+class StrExpr: public Expr
+{
+    public:
+        StrExpr(std::string _value): value(_value) {}
+
+        std::string stringify()
+        {
+            return value;
+        }
+
+        ~StrExpr() {}
+
+    private:
+        std::string value;
 };
 
 class BinaryOpExpr: public Expr

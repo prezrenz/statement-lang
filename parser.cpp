@@ -2,7 +2,6 @@
 #include "ast.hpp"
 #include "token.hpp"
 #include <iostream>
-#include <iterator>
 #include <string>
 #include <vector>
 
@@ -18,6 +17,7 @@ std::vector<Stmt*> Parser::parse()
     catch (const char* e)
     {
         // Error handling and reporting
+        std::cout << e << "\nExiting parser..." << std::endl;
     }
 
     return stmts;
@@ -41,6 +41,8 @@ Stmt* Parser::parseStmt()
 {
     if((*current)->type == TOK_VAR) return parseDeclStmt();
     if((*current)->type == TOK_PRINT) return parsePrintStmt();
+
+    throw "Error: invalid statement" + (**current).token;
 }
 
 Stmt* Parser::parseDeclStmt()
@@ -168,14 +170,14 @@ Expr* Parser::primary()
 {
     if(match(TOK_NUM))
     {
-         return new PrimaryExpr<int>((**current).num_literal);
+         return new NumExpr((**current).num_literal);
     }
     else if(match(TOK_STR))
     {
-        return new PrimaryExpr<std::string>((**current).token); 
+        return new StrExpr((**current).token); 
     }
     else
     {
-        return new PrimaryExpr<std::string>((**current).token); // catch all till other primaries are implemented
+        return new StrExpr((**current).token); // catch all till other primaries are implemented
     }
 }
