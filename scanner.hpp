@@ -14,12 +14,15 @@ class Scanner
         std::ifstream* program;
         int line;
         char current;
+        char previous;
         std::vector<Token*> tokens;
 
         void advance();
+        char peek();
         TokenTypes matchReservedWord(std::string token);
         void createToken(TokenTypes type, std::string token);
         void createSingleToken(TokenTypes type, std::string token);
+        void createDoubleToken(TokenTypes type, std::string token);
         void createWordToken(std::string token);
         void createIntToken(std::string token);
         void createStringToken(std::string token);

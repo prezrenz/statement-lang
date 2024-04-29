@@ -16,9 +16,10 @@ std::string tokenStrings[28] = {
     
     "TOK_EQUAL", "TOK_EEQUAL", "TOK_LESS_THAN",
     "TOK_GREATER_THAN", "TOK_EGREATER", "TOK_ELESS",
+    "TOK_NEQUAL",
 
     "TOK_PLUS", "TOK_MINUS", "TOK_STAR",
-    "TOK_SLASH", "TOK_BANG", "TOK_SCOLON",
+    "TOK_SLASH", "TOK_SCOLON",
     "TOK_COLON", "TOK_QUOTE", "TOK_LPAREN",
     "TOK_RPAREN",
 
@@ -49,18 +50,18 @@ int main(int argc, char** argv)
     Scanner scanner(&file);
     tokens = scanner.scan();
 
-    Parser parser(tokens);
-    statements = parser.parse();
+    //Parser parser(tokens);
+    //statements = parser.parse();
 
     if(tokens.empty()) return 1; 
 
-    /*for (size_t i = 0; i < tokens.size(); i++)
+    for (size_t i = 0; i < tokens.size(); i++)
     {
         cout << tokenStrings[tokens[i]->type] << endl;
         cout << tokens[i]->token << endl;
         cout << tokens[i]->num_literal << endl;
         cout << "----------------" << endl;
-    }*/
+    }
 
     return 0;
 }

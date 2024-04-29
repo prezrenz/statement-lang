@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cctype>
 #include "scanner.hpp"
+#include "token.hpp"
 
 using namespace std;
 
@@ -32,7 +33,15 @@ vector<Token*> Scanner::scan()
 
 void Scanner::advance()
 {
+    previous = current;
     current = program->get();
+}
+
+char Scanner::peek()
+{
+    char peeked = program->get();
+    program->unget();
+    return peeked;
 }
 
 TokenTypes Scanner::matchReservedWord(string token)
@@ -99,6 +108,16 @@ void Scanner::createSingleToken(TokenTypes type, string token)
     createToken(type, token);
 }
 
+void Scanner::createDoubleToken(TokenTypes type, string token)
+{
+    token += current;
+    advance();
+    token += current;
+    advance();
+
+    createToken(type, token);
+}
+
 void Scanner::createWordToken(string token)
 {
     while (isalpha(current))
@@ -152,16 +171,44 @@ void Scanner::scanToken()
             createSingleToken(TOK_STAR, token);
             break;
         case '=':
-            createSingleToken(TOK_EQUAL, token);
+            if(peek() == '=')
+            {
+                createDoubleToken(TOK_EEQUAL, token);
+            }
+            else
+            {
+                createSingleToken(TOK_EQUAL, token);
+            }
             break;
         case '>':
-            createSingleToken(TOK_GREATER_THAN, token);
+            if(peek() == '=')
+            {
+                createDoubleToken(TOK_EGREATER, token);
+            }
+            else
+            {
+                createSingleToken(TOK_GREATER_THAN, token);
+            }
             break;
         case '<':
-            createSingleToken(TOK_LESS_THAN, token);
+            if(peek() == '=')
+            {
+                createDoubleToken(TOK_ELESS, token);
+            }
+            else
+            {
+                createSingleToken(TOK_LESS_THAN, token);
+            }
             break;
         case '!':
-            createSingleToken(TOK_BANG, token);
+            if(peek() == '=')
+            {
+                createDoubleToken(TOK_NEQUAL, token);
+            }
+            else
+            {
+                throw "Scanner Error: lone '!' is not a valid token in language";
+            }
             break;
         case ';':
             createSingleToken(TOK_COLON, token);
