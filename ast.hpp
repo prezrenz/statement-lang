@@ -84,6 +84,33 @@ class InputStmt: public Stmt
         std::string name;
 };
 
+class LabelStmt: public Stmt
+{
+    public:
+        LabelStmt(std::string _name): name(_name) {}
+
+        std::string stringify()
+        {
+            return name;
+        }
+
+        ~LabelStmt(){}
+
+    private:
+        std::string name;
+};
+
+class IfStmt: public Stmt
+{
+    public:
+        IfStmt(LabelStmt _label, LabelStmt _elseif, Expr* _condition): label(_label), elseif(_elseif), condition(_condition) {}
+
+    private:
+        LabelStmt label;
+        LabelStmt elseif;
+        Expr* condition;
+};
+
 /*
 template<typename T>
 class PrimaryExpr: public Expr
