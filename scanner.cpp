@@ -211,6 +211,9 @@ void Scanner::scanToken()
             }
             break;
         case ';':
+            createSingleToken(TOK_SCOLON, token);
+            break;
+        case ':':
             createSingleToken(TOK_COLON, token);
             break;
         case '(':
@@ -220,7 +223,8 @@ void Scanner::scanToken()
             createSingleToken(TOK_RPAREN, token);
             break;
         case '"':
-            createSingleToken(TOK_QUOTE, token);
+            // NOTE: should quotes be scanned and made to tokens for the parser?
+            advance(); //createSingleToken(TOK_QUOTE, token);
             createStringToken(token);
                     
             if(program->eof())
@@ -228,7 +232,7 @@ void Scanner::scanToken()
                 throw "Scanner Error: unterminated string";
             }
 
-            createSingleToken(TOK_QUOTE, token); 
+            advance(); //createSingleToken(TOK_QUOTE, token); 
             break;
         case ' ':
         case '\n':

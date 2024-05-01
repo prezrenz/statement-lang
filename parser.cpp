@@ -14,10 +14,10 @@ std::vector<Stmt*> Parser::parse()
             stmts.push_back(parseStmt());
         }
     }
-    catch (const char* e)
+    catch (std::string& e)
     {
         // Error handling and reporting
-        std::cout << e << "\nExiting parser..." << std::endl;
+        std::cout << e << std::endl;
     }
 
     return stmts;
@@ -44,10 +44,11 @@ bool Parser::match(TokenTypes type)
 
 Stmt* Parser::parseStmt()
 {
+    std::cout << (**current).token << std::endl;
     if(match(TOK_VAR)) return parseDeclStmt();
     if(match(TOK_PRINT)) return parsePrintStmt();
 
-    throw "Error: invalid statement" + (**current).token;
+    throw std::string("Parser Error: invalid statement") + std::string("'") + (**current).token + std::string("'");
 }
 
 Stmt* Parser::parseDeclStmt()
@@ -75,6 +76,11 @@ Stmt* Parser::parseDeclStmt()
 
     DeclStmt* newDeclStmt = new DeclStmt(name, expr);
 
+    if(!match(TOK_SCOLON))
+    {
+        throw "Parser Error: expected semicolon at the end of statement";
+    }
+
     return newDeclStmt;
 }
 
@@ -89,10 +95,15 @@ Stmt* Parser::parsePrintStmt()
 
     Expr* expr;
 
-
     expr = parseExpr();
+    PrintStmt* newPrintStmt = new PrintStmt(expr);
 
-    return new PrintStmt(expr);
+    if(!match(TOK_SCOLON))
+    {
+        throw "Parser Error: expected semicolon at the end of statement";
+    }
+
+    return newPrintStmt;
 }
     
 Stmt* Parser::parseInputStmt()

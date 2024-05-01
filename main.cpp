@@ -50,18 +50,20 @@ int main(int argc, char** argv)
     Scanner scanner(&file);
     tokens = scanner.scan();
 
-    //Parser parser(tokens);
-    //statements = parser.parse();
+    Parser parser(tokens);
+    statements = parser.parse();
 
     if(tokens.empty()) return 1; 
 
-    for (size_t i = 0; i < tokens.size(); i++)
+    /*for (size_t i = 0; i < tokens.size(); i++)
     {
         cout << tokenStrings[tokens[i]->type] << endl;
         cout << tokens[i]->token << endl;
         cout << tokens[i]->num_literal << endl;
         cout << "----------------" << endl;
-    }
+    }*/
+
+    cout << statements[0]->stringify();
 
     return 0;
 }
