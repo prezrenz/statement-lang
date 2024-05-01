@@ -110,10 +110,9 @@ Expr* Parser::equality()
 {
     Expr* left = comparison();
 
-    while(match(TOK_EEQUAL)) // TODO: Fix scanner to include != token
+    while(match(TOK_EEQUAL) || match(TOK_NEQUAL))
     {
-        Token op = **current;
-        advance();
+        Token op = previous;
 
         Expr* right = comparison();
         left = new BinaryOpExpr(op.token, left, right);
@@ -128,8 +127,7 @@ Expr* Parser::comparison()
 
     while(match(TOK_LESS_THAN) || match(TOK_GREATER_THAN) || match(TOK_EGREATER) || match(TOK_ELESS))
     {
-        Token op = **current;
-        advance();
+        Token op = previous;
 
         Expr* right = term();
         left = new BinaryOpExpr(op.token, left, right);
@@ -144,8 +142,7 @@ Expr* Parser::term()
 
     while(match(TOK_PLUS) || match(TOK_MINUS))
     {
-        Token op = **current;
-        advance();
+        Token op = previous;
 
         Expr* right = factor();
         left = new BinaryOpExpr(op.token, left, right);
@@ -160,8 +157,7 @@ Expr* Parser::factor()
 
     while(match(TOK_STAR) || match(TOK_SLASH))
     {
-        Token op = **current;
-        advance();
+        Token op = previous;
 
         Expr* right = primary();
         left = new BinaryOpExpr(op.token, left, right);
