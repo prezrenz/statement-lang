@@ -44,7 +44,6 @@ bool Parser::match(TokenTypes type)
 
 Stmt* Parser::parseStmt()
 {
-    std::cout << (**current).token << std::endl;
     if(match(TOK_VAR)) return parseDeclStmt();
     if(match(TOK_PRINT)) return parsePrintStmt();
 
@@ -78,7 +77,7 @@ Stmt* Parser::parseDeclStmt()
 
     if(!match(TOK_SCOLON))
     {
-        throw "Parser Error: expected semicolon at the end of statement";
+        throw std::string("Parser Error: expected semicolon at the end of statement");
     }
 
     return newDeclStmt;
@@ -96,11 +95,12 @@ Stmt* Parser::parsePrintStmt()
     Expr* expr;
 
     expr = parseExpr();
+    std::cout << (**current).token << std::endl;
     PrintStmt* newPrintStmt = new PrintStmt(expr);
 
     if(!match(TOK_SCOLON))
     {
-        throw "Parser Error: expected semicolon at the end of statement";
+        throw std::string("Parser Error: expected semicolon at the end of print statement");
     }
 
     return newPrintStmt;
@@ -181,14 +181,17 @@ Expr* Parser::primary()
 {
     if(match(TOK_NUM))
     {
-         return new NumExpr((**current).num_literal);
+         return new NumExpr(previous.num_literal);
     }
     else if(match(TOK_STR))
     {
-        return new StrExpr((**current).token); 
+        return new StrExpr(previous.token); 
     }
     else
     {
-        return new StrExpr((**current).token); // catch all till other primaries are implemented
+        throw std::string("Parser Error: invalid expression");
+        /*std::cout << (**current).token << std::endl;
+        advance();
+        return new StrExpr(previous.token);*/ // catch all till other primaries are implemented
     }
 }
