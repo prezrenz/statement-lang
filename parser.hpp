@@ -15,6 +15,7 @@ class Parser
         std::vector<Token*> tokens;
         std::vector<Stmt*> stmts;
         std::vector<Token*>::iterator current = tokens.begin();
+        Token previous;
 
         void advance();
         bool match(TokenTypes type);

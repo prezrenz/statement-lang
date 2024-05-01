@@ -25,6 +25,7 @@ std::vector<Stmt*> Parser::parse()
 
 void Parser::advance()
 {
+    previous = **current;
     current++;
 }
 
@@ -32,30 +33,31 @@ bool Parser::match(TokenTypes type)
 {
     Token tok = **current;
 
-    if(tok.type == type) return true;
+    if(tok.type == type)
+    {
+        advance();
+        return true;
+    }
 
     return false;
 }
 
 Stmt* Parser::parseStmt()
 {
-    if((*current)->type == TOK_VAR) return parseDeclStmt();
-    if((*current)->type == TOK_PRINT) return parsePrintStmt();
+    if(match(TOK_VAR)) return parseDeclStmt();
+    if(match(TOK_PRINT)) return parsePrintStmt();
 
     throw "Error: invalid statement" + (**current).token;
 }
 
 Stmt* Parser::parseDeclStmt()
 {
-    advance();
-
     std::string name;
     Expr* expr;
 
     if(match(TOK_WORD))
     {
-        name = (*current)->token;
-        advance();
+        name = previous.token;
     }
     else
     {
@@ -64,9 +66,11 @@ Stmt* Parser::parseDeclStmt()
 
     if(match(TOK_EQUAL))
     {
-        advance();
-
-        
+        expr = parseExpr();
+    }
+    else
+    {
+        expr = 0; // TODO: should new variables default to a null value?
     }
 
     DeclStmt* newDeclStmt = new DeclStmt(name, expr);
