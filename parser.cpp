@@ -47,6 +47,7 @@ Stmt* Parser::parseStmt()
 {
     if(match(TOK_VAR)) return parseDeclStmt();
     if(match(TOK_PRINT)) return parsePrintStmt();
+    if(match(TOK_WORD)) return parseWordStmt();
 
     throw std::string("Parser Error: invalid statement") + std::string("'") + (**current).token + std::string("'");
 }
@@ -62,7 +63,7 @@ Stmt* Parser::parseDeclStmt()
     }
     else
     {
-        // error here, expected name
+        throw std::string("Parser Error: expected word after var keyword");
     }
 
     if(match(TOK_EQUAL))
@@ -84,9 +85,30 @@ Stmt* Parser::parseDeclStmt()
     return newDeclStmt;
 }
 
-Stmt* Parser::parseAssignStmt()
+Stmt* Parser::parseWordStmt()
 {
-    // TODO
+    std::string name = previous.token;
+
+    if(match(TOK_EQUAL))
+    {
+        Expr* expr;
+        expr = parseExpr();
+
+        if(!match(TOK_SCOLON))
+        {
+            throw std::string("Parser Error: expected semicolon at the end of assign statement");
+        }
+
+        return new AssignStmt(name, expr);
+    }
+    else if(match(TOK_COLON))
+    {
+        return new LabelStmt(name);
+    }
+    else
+    {
+        throw std::string("Parser Error: expected ':' or '=' after word, for label or assign statements respectively");
+    }
 }
 
 Stmt* Parser::parsePrintStmt()

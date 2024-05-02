@@ -92,7 +92,7 @@ class LabelStmt: public Stmt
 
         std::string stringify()
         {
-            return name;
+            return name + ": ";
         }
 
         ~LabelStmt(){}
@@ -104,11 +104,11 @@ class LabelStmt: public Stmt
 class IfStmt: public Stmt
 {
     public:
-        IfStmt(LabelStmt _label, LabelStmt _elseif, Expr* _condition): label(_label), elseif(_elseif), condition(_condition) {}
+        IfStmt(std::string _label, std::string _elseif, Expr* _condition): label(_label), elseif(_elseif), condition(_condition) {}
 
     private:
-        LabelStmt label;
-        LabelStmt elseif;
+        std::string label;
+        std::string elseif;
         Expr* condition;
 };
 

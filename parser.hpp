@@ -22,7 +22,7 @@ class Parser
 
         Stmt* parseStmt();
         Stmt* parseDeclStmt();
-        Stmt* parseAssignStmt();
+        Stmt* parseWordStmt();
         Stmt* parsePrintStmt();
         Stmt* parseInputStmt();
 
