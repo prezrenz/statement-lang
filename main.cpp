@@ -63,7 +63,10 @@ int main(int argc, char** argv)
         cout << "----------------" << endl;
     }*/
 
-    cout << statements[0]->stringify();
+    for (size_t i = 0; i < statements.size(); i++)
+    {
+        cout << statements[i]->stringify() << endl;
+    }
 
     return 0;
 }

@@ -185,6 +185,22 @@ Expr* Parser::primary()
     {
         return new StrExpr(previous.token); 
     }
+    else if(match(TOK_WORD))
+    {
+        return new VarExpr(previous.token);
+    }
+    else if(match(TOK_TRUE))
+    {
+        return new BoolExpr(true);
+    }
+    else if(match(TOK_FALSE))
+    {
+        return new BoolExpr(false);
+    }
+    else if(match(TOK_NONE))
+    {
+        return new NoneExpr();
+    }
     else
     {
         throw std::string("Parser Error: invalid expression");

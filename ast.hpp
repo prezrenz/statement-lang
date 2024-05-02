@@ -194,17 +194,17 @@ class BoolExpr: public Expr
         bool value;
 };
 
-class NullExpr: public Expr // NOTE: looks dangerous
+class NoneExpr: public Expr // NOTE: looks dangerous
 {
     public:
-        NullExpr() {}
+        NoneExpr() {}
 
         std::string stringify()
         {
             return "null";
         }
 
-        ~NullExpr() {}
+        ~NoneExpr() {}
 
     private:
         std::nullptr_t value;
