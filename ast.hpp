@@ -1,6 +1,7 @@
 #ifndef AST_HPP
 #define AST_HPP
 
+#include <cstddef>
 #include <string>
 
 // TODO: Convert to classes and abstract class
@@ -160,6 +161,55 @@ class StrExpr: public Expr
     private:
         std::string value;
 };
+
+class VarExpr: public Expr
+{
+    public:
+        VarExpr(std::string _name): name(_name) {}
+
+        std::string stringify()
+        {
+            return name;
+        }
+
+        ~VarExpr() {}
+
+    private:
+        std::string name;
+};
+
+class BoolExpr: public Expr
+{
+    public:
+        BoolExpr(bool _value): value(_value) {}
+
+        std::string stringify()
+        {
+            return std::to_string(value);
+        }
+
+        ~BoolExpr() {}
+
+    private:
+        bool value;
+};
+
+class NullExpr: public Expr // NOTE: looks dangerous
+{
+    public:
+        NullExpr() {}
+
+        std::string stringify()
+        {
+            return "null";
+        }
+
+        ~NullExpr() {}
+
+    private:
+        std::nullptr_t value;
+};
+
 
 class BinaryOpExpr: public Expr
 {
