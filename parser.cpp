@@ -2,6 +2,7 @@
 #include "ast.hpp"
 #include "token.hpp"
 #include <iostream>
+#include <ostream>
 #include <string>
 #include <vector>
 
@@ -66,7 +67,7 @@ Stmt* Parser::parseDeclStmt()
 
     if(match(TOK_EQUAL))
     {
-        expr = parseExpr();
+        expr = parseExpr(); 
     }
     else
     {
@@ -79,7 +80,7 @@ Stmt* Parser::parseDeclStmt()
     {
         throw std::string("Parser Error: expected semicolon at the end of statement");
     }
-
+   
     return newDeclStmt;
 }
 
@@ -90,12 +91,9 @@ Stmt* Parser::parseAssignStmt()
 
 Stmt* Parser::parsePrintStmt()
 {
-    advance();
-
     Expr* expr;
 
     expr = parseExpr();
-    std::cout << (**current).token << std::endl;
     PrintStmt* newPrintStmt = new PrintStmt(expr);
 
     if(!match(TOK_SCOLON))
