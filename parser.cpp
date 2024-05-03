@@ -4,6 +4,7 @@
 #include <iostream>
 #include <ostream>
 #include <string>
+#include <typeinfo>
 #include <vector>
 
 std::vector<Stmt*> Parser::parse()
@@ -128,7 +129,21 @@ Stmt* Parser::parsePrintStmt()
     
 Stmt* Parser::parseInputStmt()
 {
-    // TODO
+    Expr* expr;
+    VarExpr* varType;
+    expr = parseExpr();
+    const std::type_info& t1 = typeid(expr);
+    const std::type_info& t2 = typeid(varType);
+
+    if(t1 == t2)
+    {
+        return new InputStmt(expr);
+    }
+
+    if(!match(TOK_SCOLON))
+    {
+        throw std::string("Parser Error: expected semicolon at the end of print statement");
+    }
 }
 
 
