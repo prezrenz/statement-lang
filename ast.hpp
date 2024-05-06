@@ -72,17 +72,17 @@ class PrintStmt: public Stmt
 class InputStmt: public Stmt
 {
     public:
-        InputStmt(Expr* _var): var(_var) {}
+        InputStmt(std::string _var): var(_var) {}
 
         std::string stringify()
         {
-            return "input " + var->stringify();
+            return "input " + var;
         }
 
         ~InputStmt() {}
 
     private:
-        Expr* var;
+        std::string var;
 };
 
 class LabelStmt: public Stmt

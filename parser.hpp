@@ -25,6 +25,7 @@ class Parser
         Stmt* parseWordStmt();
         Stmt* parsePrintStmt();
         Stmt* parseInputStmt();
+        Stmt* parseIfStmt();
 
         Expr* parseExpr();
         Expr* equality();

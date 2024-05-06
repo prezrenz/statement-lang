@@ -4,7 +4,6 @@
 #include <iostream>
 #include <ostream>
 #include <string>
-#include <typeinfo>
 #include <vector>
 
 std::vector<Stmt*> Parser::parse()
@@ -129,21 +128,24 @@ Stmt* Parser::parsePrintStmt()
     
 Stmt* Parser::parseInputStmt()
 {
-    Expr* expr;
-    VarExpr* varType;
-    expr = parseExpr();
-    const std::type_info& t1 = typeid(expr);
-    const std::type_info& t2 = typeid(varType);
-
-    if(t1 == t2)
+    if(match(TOK_WORD))
     {
-        return new InputStmt(expr);
+        return new InputStmt((**current).token);
+    }
+    else
+    {
+        throw std::string("Parser Error: expected a variable name in input statement");
     }
 
     if(!match(TOK_SCOLON))
     {
         throw std::string("Parser Error: expected semicolon at the end of print statement");
     }
+}
+
+Stmt* Parser::parseIfStmt()
+{
+    // TODO
 }
 
 
