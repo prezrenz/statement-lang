@@ -145,7 +145,38 @@ Stmt* Parser::parseInputStmt()
 
 Stmt* Parser::parseIfStmt()
 {
-    // TODO
+    std::string label, elseif;
+    Expr* condition;
+
+    condition = parseExpr();
+
+    if(match(TOK_WORD))
+    {
+        label = (**current).token;
+    }
+    else
+    {
+        throw "Parser Error: expected a label after condition in if statement";
+    }
+
+    if(match(TOK_ELSE))
+    {
+        if(match(TOK_WORD))
+        {
+            elseif = (**current).token;
+        }
+        else
+        {
+            throw "Parser Error: expected a label after else in if statement";
+        }
+    }
+
+    if(!match(TOK_SCOLON))
+    {
+        throw std::string("Parser Error: expected semicolon at the end of print statement");
+    }
+    
+    return new IfStmt(label, elseif, condition);
 }
 
 

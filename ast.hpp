@@ -105,6 +105,17 @@ class IfStmt: public Stmt
 {
     public:
         IfStmt(std::string _label, std::string _elseif, Expr* _condition): label(_label), elseif(_elseif), condition(_condition) {}
+        
+        std::string stringify()
+        {
+            if(!elseif.empty())
+            {
+                return "if " + condition->stringify() + " " + label + "else " + elseif;
+            }
+            return "if " + condition->stringify() + " " + label;
+        }
+
+        ~IfStmt(){}
 
     private:
         std::string label;
