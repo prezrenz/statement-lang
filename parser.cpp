@@ -48,6 +48,8 @@ Stmt* Parser::parseStmt()
     if(match(TOK_VAR)) return parseDeclStmt();
     if(match(TOK_PRINT)) return parsePrintStmt();
     if(match(TOK_WORD)) return parseWordStmt();
+    if(match(TOK_INPUT)) return parseInputStmt();
+    if(match(TOK_IF)) return parseIfStmt();
 
     throw std::string("Parser Error: invalid statement") + std::string("'") + (**current).token + std::string("'");
 }
