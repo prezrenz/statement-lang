@@ -110,7 +110,7 @@ class IfStmt: public Stmt
         {
             if(!elseif.empty())
             {
-                return "if " + condition->stringify() + " " + label + "else " + elseif;
+                return "if " + condition->stringify() + " " + label + " else " + elseif;
             }
             return "if " + condition->stringify() + " " + label;
         }

@@ -26,6 +26,7 @@ struct Token
     TokenTypes type;
     std::string token;
     int num_literal;
+    int line;
 };
 
 #endif

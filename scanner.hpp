@@ -12,7 +12,7 @@ class Scanner
         std::vector<Token*> scan();
     private:
         std::ifstream* program;
-        int line;
+        int line = 0;
         char current;
         char previous;
         std::vector<Token*> tokens;

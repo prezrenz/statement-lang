@@ -91,6 +91,7 @@ void Scanner::createToken(TokenTypes type, string token)
     newToken->type = type;
     newToken->token = token;
     newToken->num_literal = 0;
+    newToken->line = line;
 
     if(type == TOK_NUM)
     {
@@ -235,8 +236,11 @@ void Scanner::scanToken()
             advance(); //createSingleToken(TOK_QUOTE, token); 
             break;
         case ' ':
+            advance();
+            break;
         case '\n':
             advance();
+            line += 1;
             break;
 
         default:

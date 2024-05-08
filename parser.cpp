@@ -18,7 +18,7 @@ std::vector<Stmt*> Parser::parse()
     catch (std::string& e)
     {
         // Error handling and reporting
-        std::cout << e << std::endl;
+        std::cout << e << " [line " << (**current).line << ", " << previous.token << "]" << std::endl;
     }
 
     return stmts;
@@ -74,7 +74,7 @@ Stmt* Parser::parseDeclStmt()
     }
     else
     {
-        expr = 0; // TODO: should new variables default to a null value?
+        expr = new NumExpr(0); // TODO: should new variables default to a null value?
     }
 
     DeclStmt* newDeclStmt = new DeclStmt(name, expr);
@@ -130,9 +130,10 @@ Stmt* Parser::parsePrintStmt()
     
 Stmt* Parser::parseInputStmt()
 {
+    std::string word;
     if(match(TOK_WORD))
     {
-        return new InputStmt((**current).token);
+        word = previous.token;
     }
     else
     {
@@ -143,6 +144,7 @@ Stmt* Parser::parseInputStmt()
     {
         throw std::string("Parser Error: expected semicolon at the end of print statement");
     }
+    return new InputStmt(word);
 }
 
 Stmt* Parser::parseIfStmt()
@@ -154,7 +156,7 @@ Stmt* Parser::parseIfStmt()
 
     if(match(TOK_WORD))
     {
-        label = (**current).token;
+        label = previous.token;
     }
     else
     {
@@ -165,7 +167,7 @@ Stmt* Parser::parseIfStmt()
     {
         if(match(TOK_WORD))
         {
-            elseif = (**current).token;
+            elseif = previous.token;
         }
         else
         {
