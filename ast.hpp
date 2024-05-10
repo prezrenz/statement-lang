@@ -1,6 +1,7 @@
 #ifndef AST_HPP
 #define AST_HPP
 
+#include <any>
 #include <cstddef>
 #include <string>
 
@@ -10,6 +11,7 @@ class Expr
 {
     public:
         virtual std::string stringify() = 0;
+        virtual std::any execute() = 0;
         virtual ~Expr() {}
 };
 
@@ -17,6 +19,7 @@ class Stmt
 {
     public:
         virtual std::string stringify() = 0;
+        virtual std::any execute() = 0;
         virtual ~Stmt() {}
 };
 
@@ -24,10 +27,13 @@ class DeclStmt: public Stmt
 {
     public:
         DeclStmt(std::string _name, Expr* _expr): name(_name), expr(_expr) {}
+
         std::string stringify()
         {
             return "var " + name + " = " + expr->stringify();
         }
+
+        std::any execute();
 
         ~DeclStmt() {}
 
@@ -46,6 +52,8 @@ class AssignStmt: public Stmt
             return name + " = " + expr->stringify();
         }
 
+        std::any execute();
+
         ~AssignStmt() {}
 
     private:
@@ -63,6 +71,8 @@ class PrintStmt: public Stmt
             return "print " + expr->stringify();
         }
 
+        std::any execute();
+
         ~PrintStmt() {}
 
     private:
@@ -79,6 +89,8 @@ class InputStmt: public Stmt
             return "input " + var;
         }
 
+        std::any execute();
+
         ~InputStmt() {}
 
     private:
@@ -94,6 +106,8 @@ class LabelStmt: public Stmt
         {
             return name + ": ";
         }
+
+        std::any execute();
 
         ~LabelStmt(){}
 
@@ -115,6 +129,8 @@ class IfStmt: public Stmt
             return "if " + condition->stringify() + " " + label;
         }
 
+        std::any execute();
+
         ~IfStmt(){}
 
     private:
@@ -122,24 +138,6 @@ class IfStmt: public Stmt
         std::string elseif;
         Expr* condition;
 };
-
-/*
-template<typename T>
-class PrimaryExpr: public Expr
-{
-    public:
-        PrimaryExpr(T _value): value(_value) {}
-
-        std::string stringify()
-        {
-            return std::to_string(value);
-        }
-
-        ~PrimaryExpr() {}
-
-    private:
-        T value;
-};*/
 
 class NumExpr: public Expr
 {
@@ -150,6 +148,8 @@ class NumExpr: public Expr
         {
             return std::to_string(value);
         }
+
+        std::any execute();
 
         ~NumExpr() {}
 
@@ -167,6 +167,8 @@ class StrExpr: public Expr
             return value;
         }
 
+        std::any execute();
+
         ~StrExpr() {}
 
     private:
@@ -182,6 +184,8 @@ class VarExpr: public Expr
         {
             return name;
         }
+
+        std::any execute();
 
         ~VarExpr() {}
 
@@ -199,6 +203,8 @@ class BoolExpr: public Expr
             return std::to_string(value);
         }
 
+        std::any execute();
+
         ~BoolExpr() {}
 
     private:
@@ -214,6 +220,8 @@ class NoneExpr: public Expr // NOTE: looks dangerous
         {
             return "null";
         }
+
+        std::any execute();
 
         ~NoneExpr() {}
 
@@ -232,6 +240,8 @@ class BinaryOpExpr: public Expr
             return "( " + op + " " + left->stringify() + " " + right->stringify() + " )";
         }
 
+        std::any execute();
+
         ~BinaryOpExpr() {}
 
     private:
@@ -249,6 +259,8 @@ class GroupingExpr: public Expr
         {
             return "( " + expr->stringify() + " )";
         }
+
+        std::any execute();
 
         ~GroupingExpr() {}
 
