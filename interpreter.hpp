@@ -36,6 +36,7 @@ class Interpreter
         
         std::vector<Stmt*> statements;
         int current = 0;
+        Environment* envir = new Environment(); 
                 
 };
 
