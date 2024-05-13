@@ -16,6 +16,7 @@ class Environment
         void addVariable(std::string name, std::any value);
         void addLabel(std::string label, int position);
 
+        // FIX: Should check if label or variable exists, throw error if not
         std::any getVariable(std::string name) { return variables[name]; }
         int getLabel(std::string label) { return labels[label]; }
 

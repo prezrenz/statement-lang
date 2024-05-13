@@ -3,6 +3,7 @@
 
 #include <any>
 #include <cstddef>
+#include <map>
 #include <string>
 
 // TODO: Convert to classes and abstract class
@@ -33,7 +34,7 @@ class DeclStmt: public Stmt
             return "var " + name + " = " + expr->stringify();
         }
 
-        std::any execute();
+        std::any execute(std::map<std::string, std::any>* environment);
 
         ~DeclStmt() {}
 
