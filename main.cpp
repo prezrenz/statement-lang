@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 
+#include "interpreter.hpp"
 #include "token.hpp"
 #include "scanner.hpp"
 #include "ast.hpp"
@@ -67,6 +68,9 @@ int main(int argc, char** argv)
     {
         cout << statements[i]->stringify() << endl;
     }
+
+    Interpreter interpreter(statements);
+    interpreter.interpret();
 
     return 0;
 }

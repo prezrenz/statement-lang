@@ -2,6 +2,5 @@ var i;
 input i;
 ADD:
 i = i + 1;
-if i <= 10 ADD else FIN;
 FIN:
 print i;

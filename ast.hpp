@@ -6,13 +6,35 @@
 #include <map>
 #include <string>
 
-// TODO: Convert to classes and abstract class
+class Environment
+{
+    public:
+
+        Environment() {};
+
+        int current = 0; // FIXME: this should be in the interpreter...                
+
+        void addVariable(std::string name, std::any value);
+        void addLabel(std::string label, int position);
+
+        // FIX: Should check if label or variable exists, throw error if not
+        std::any getVariable(std::string name) { return variables[name]; }
+        void setVariable(std::string name, std::any value) { variables[name] = value; }
+        int getLabel(std::string label) { return labels[label]; }
+
+        ~Environment() {}
+
+    private:
+
+        std::map<std::string, std::any> variables;
+        std::map<std::string, int> labels;   
+};
 
 class Expr
 {
     public:
         virtual std::string stringify() = 0;
-        virtual std::any execute() = 0;
+        virtual std::any execute(Environment* environment) = 0; // Only VarExpr needs this, poor design has led to this
         virtual ~Expr() {}
 };
 
@@ -20,7 +42,7 @@ class Stmt
 {
     public:
         virtual std::string stringify() = 0;
-        virtual std::any execute() = 0;
+        virtual void execute(Environment* environment) = 0;
         virtual ~Stmt() {}
 };
 
@@ -34,7 +56,7 @@ class DeclStmt: public Stmt
             return "var " + name + " = " + expr->stringify();
         }
 
-        std::any execute(std::map<std::string, std::any>* environment);
+        void execute(Environment* environment);
 
         ~DeclStmt() {}
 
@@ -53,7 +75,7 @@ class AssignStmt: public Stmt
             return name + " = " + expr->stringify();
         }
 
-        std::any execute();
+        void execute(Environment* environment);
 
         ~AssignStmt() {}
 
@@ -72,7 +94,7 @@ class PrintStmt: public Stmt
             return "print " + expr->stringify();
         }
 
-        std::any execute();
+        void execute(Environment* environment);
 
         ~PrintStmt() {}
 
@@ -90,7 +112,7 @@ class InputStmt: public Stmt
             return "input " + var;
         }
 
-        std::any execute();
+        void execute(Environment* environment);
 
         ~InputStmt() {}
 
@@ -108,7 +130,7 @@ class LabelStmt: public Stmt
             return name + ": ";
         }
 
-        std::any execute();
+        void execute(Environment* environment);
 
         ~LabelStmt(){}
 
@@ -130,7 +152,7 @@ class IfStmt: public Stmt
             return "if " + condition->stringify() + " " + label;
         }
 
-        std::any execute();
+        void execute(Environment* environment);
 
         ~IfStmt(){}
 
@@ -150,7 +172,7 @@ class NumExpr: public Expr
             return std::to_string(value);
         }
 
-        std::any execute();
+        std::any execute(Environment* environment);
 
         ~NumExpr() {}
 
@@ -168,7 +190,7 @@ class StrExpr: public Expr
             return value;
         }
 
-        std::any execute();
+        std::any execute(Environment* environment);
 
         ~StrExpr() {}
 
@@ -186,6 +208,7 @@ class VarExpr: public Expr
             return name;
         }
 
+        std::any execute(Environment* environment);
         std::any execute();
 
         ~VarExpr() {}
@@ -204,7 +227,7 @@ class BoolExpr: public Expr
             return std::to_string(value);
         }
 
-        std::any execute();
+        std::any execute(Environment* environment);
 
         ~BoolExpr() {}
 
@@ -219,10 +242,10 @@ class NoneExpr: public Expr // NOTE: looks dangerous
 
         std::string stringify()
         {
-            return "null";
+            return "none";
         }
 
-        std::any execute();
+        std::any execute(Environment* environment);
 
         ~NoneExpr() {}
 
@@ -241,7 +264,7 @@ class BinaryOpExpr: public Expr
             return "( " + op + " " + left->stringify() + " " + right->stringify() + " )";
         }
 
-        std::any execute();
+        std::any execute(Environment* environment);
 
         ~BinaryOpExpr() {}
 
@@ -261,7 +284,7 @@ class GroupingExpr: public Expr
             return "( " + expr->stringify() + " )";
         }
 
-        std::any execute();
+        std::any execute(Environment* environment);
 
         ~GroupingExpr() {}
 
