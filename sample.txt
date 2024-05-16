@@ -1,6 +1,11 @@
+print "This is a program that counts from X to 10";
 var i;
+print "Please enter a number:";
 input i;
 ADD:
 i = i + 1;
-FIN:
 print i;
+if i < 10 ADD else FIN;
+FIN:
+print "END";
+

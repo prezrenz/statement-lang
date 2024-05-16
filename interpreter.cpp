@@ -4,6 +4,7 @@
 #include <cctype>
 #include <iostream>
 #include <string>
+#include <typeinfo>
 
 bool isNumber(const std::string& a)
 {
@@ -22,12 +23,34 @@ void Environment::addLabel(std::string label, int position)
     labels.insert({label, position});
 }
 
-void Interpreter::interpret()
+void Interpreter::scanLabels()
 {
     while(envir->current <= statements.size()-1)
     {
-        statements[envir->current]->execute(envir);
+        if(typeid(*statements[envir->current]) == typeid(LabelStmt))
+        {
+            statements[envir->current]->execute(envir);
+        }
         envir->current++;
+    }
+
+    envir->current = 0;
+}
+
+void Interpreter::interpret()
+{
+    try
+    {
+        scanLabels();
+        while(envir->current <= statements.size()-1)
+        {
+            statements[envir->current]->execute(envir);
+            envir->current++;
+        }
+    }
+    catch(std::bad_cast e)
+    {
+        std::cout << e.what();
     }
 }
 
@@ -46,8 +69,19 @@ void AssignStmt::execute(Environment* environment)
 
 void PrintStmt::execute(Environment* environment)
 {
-    int value = std::any_cast<int>(expr->execute(environment));
-    std::cout << value;
+    std::any value = expr->execute(environment);
+    std::string toPrint;
+
+    if(value.type() == typeid(int))
+    {
+        toPrint = std::to_string(std::any_cast<int>(value));
+    }
+    else
+    {
+        toPrint = std::any_cast<std::string>(value);
+    }
+
+    std::cout << toPrint << std::endl;
 }
 
 void InputStmt::execute(Environment* environment)
@@ -68,12 +102,36 @@ void InputStmt::execute(Environment* environment)
 
 void LabelStmt::execute(Environment* environment)
 {
-    environment->addLabel(name, environment->current+1);
+    environment->addLabel(name, environment->current);
 }
 
 void IfStmt::execute(Environment* environment)
 {
-    // TODO
+    std::any expr = condition->execute(environment);
+    bool cond;
+
+    if(expr.type() == typeid(int) || expr.type() == typeid(bool))
+    {
+        cond = std::any_cast<bool>(expr);
+    }
+    else if(expr.type() == typeid(nullptr))
+    {
+        cond = false;
+    }
+    else
+    {
+        cond = false; // TODO: throw error if string
+    }
+
+    if(cond)
+    {
+        environment->current = environment->getLabel(label);
+    }
+    else
+    {
+        environment->current = environment->getLabel(elseif);
+    }
+
 }
 
 std::any NumExpr::execute(Environment* environment)
@@ -123,39 +181,39 @@ std::any BinaryOpExpr::execute(Environment* environment)
         }
         else if(op == "-")
         {
-            return  std::any_cast<int>(leftVal) + std::any_cast<int>(rightVal);
+            return  std::any_cast<int>(leftVal) - std::any_cast<int>(rightVal);
         }
         else if(op == "/")
         {
-            return  std::any_cast<int>(leftVal) + std::any_cast<int>(rightVal);
+            return  std::any_cast<int>(leftVal) / std::any_cast<int>(rightVal);
         }
         else if(op == "*")
         {
-            return  std::any_cast<int>(leftVal) + std::any_cast<int>(rightVal);
+            return  std::any_cast<int>(leftVal) * std::any_cast<int>(rightVal);
         }
         else if(op == ">")
         {
-            return  std::any_cast<int>(leftVal) + std::any_cast<int>(rightVal);
+            return  std::any_cast<int>(leftVal) > std::any_cast<int>(rightVal);
         }
         else if(op == "<")
         {
-            return  std::any_cast<int>(leftVal) + std::any_cast<int>(rightVal);
+            return  std::any_cast<int>(leftVal) < std::any_cast<int>(rightVal);
         }
         else if(op == ">=")
         {
-            return  std::any_cast<int>(leftVal) + std::any_cast<int>(rightVal);
+            return  std::any_cast<int>(leftVal) >= std::any_cast<int>(rightVal);
         }
         else if(op == "<=")
         {
-            return  std::any_cast<int>(leftVal) + std::any_cast<int>(rightVal);
+            return  std::any_cast<int>(leftVal) <= std::any_cast<int>(rightVal);
         }
         else if(op == "==")
         {
-            return  std::any_cast<int>(leftVal) + std::any_cast<int>(rightVal);
+            return  std::any_cast<int>(leftVal) == std::any_cast<int>(rightVal);
         }
         else if(op == "!=")
         {
-            return  std::any_cast<int>(leftVal) + std::any_cast<int>(rightVal);
+            return  std::any_cast<int>(leftVal) != std::any_cast<int>(rightVal);
         }
     }
 }

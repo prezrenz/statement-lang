@@ -64,10 +64,10 @@ int main(int argc, char** argv)
         cout << "----------------" << endl;
     }*/
 
-    for (size_t i = 0; i < statements.size(); i++)
+    /*for (size_t i = 0; i < statements.size(); i++)
     {
         cout << statements[i]->stringify() << endl;
-    }
+    }*/
 
     Interpreter interpreter(statements);
     interpreter.interpret();

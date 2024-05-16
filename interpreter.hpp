@@ -16,6 +16,8 @@ class Interpreter
         
         std::vector<Stmt*> statements;
         Environment* envir = new Environment();
+
+        void scanLabels();
 };
 
 #endif
