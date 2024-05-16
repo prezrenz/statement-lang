@@ -24,9 +24,8 @@ void Environment::addLabel(std::string label, int position)
 
 void Interpreter::interpret()
 {
-    while(envir->current != statements.size()-1)
+    while(envir->current <= statements.size()-1)
     {
-        std::cout << envir->current << std::endl;
         statements[envir->current]->execute(envir);
         envir->current++;
     }
@@ -47,7 +46,8 @@ void AssignStmt::execute(Environment* environment)
 
 void PrintStmt::execute(Environment* environment)
 {
-    std::cout << std::any_cast<std::string>(expr->execute(environment));
+    int value = std::any_cast<int>(expr->execute(environment));
+    std::cout << value;
 }
 
 void InputStmt::execute(Environment* environment)
@@ -119,43 +119,43 @@ std::any BinaryOpExpr::execute(Environment* environment)
     {
         if(op == "+")
         {
-            return  std::any_cast<int>(leftVal) + std::any_cast<int>(leftVal);
+            return  std::any_cast<int>(leftVal) + std::any_cast<int>(rightVal);
         }
         else if(op == "-")
         {
-            return  std::any_cast<int>(leftVal) + std::any_cast<int>(leftVal);
+            return  std::any_cast<int>(leftVal) + std::any_cast<int>(rightVal);
         }
         else if(op == "/")
         {
-            return  std::any_cast<int>(leftVal) + std::any_cast<int>(leftVal);
+            return  std::any_cast<int>(leftVal) + std::any_cast<int>(rightVal);
         }
         else if(op == "*")
         {
-            return  std::any_cast<int>(leftVal) + std::any_cast<int>(leftVal);
+            return  std::any_cast<int>(leftVal) + std::any_cast<int>(rightVal);
         }
         else if(op == ">")
         {
-            return  std::any_cast<int>(leftVal) + std::any_cast<int>(leftVal);
+            return  std::any_cast<int>(leftVal) + std::any_cast<int>(rightVal);
         }
         else if(op == "<")
         {
-            return  std::any_cast<int>(leftVal) + std::any_cast<int>(leftVal);
+            return  std::any_cast<int>(leftVal) + std::any_cast<int>(rightVal);
         }
         else if(op == ">=")
         {
-            return  std::any_cast<int>(leftVal) + std::any_cast<int>(leftVal);
+            return  std::any_cast<int>(leftVal) + std::any_cast<int>(rightVal);
         }
         else if(op == "<=")
         {
-            return  std::any_cast<int>(leftVal) + std::any_cast<int>(leftVal);
+            return  std::any_cast<int>(leftVal) + std::any_cast<int>(rightVal);
         }
         else if(op == "==")
         {
-            return  std::any_cast<int>(leftVal) + std::any_cast<int>(leftVal);
+            return  std::any_cast<int>(leftVal) + std::any_cast<int>(rightVal);
         }
         else if(op == "!=")
         {
-            return  std::any_cast<int>(leftVal) + std::any_cast<int>(leftVal);
+            return  std::any_cast<int>(leftVal) + std::any_cast<int>(rightVal);
         }
     }
 }
